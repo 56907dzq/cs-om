@@ -1,0 +1,27 @@
+{
+  "routes": [
+    {
+      "title": "config",
+      "heading": true,
+      "path": "/config",
+      "routes": [
+        {
+          "title": "跳板机",
+          "path": "/config/mgm"
+        },
+        {
+          "title": "PE",
+          "path": "/config/pe"
+        },
+        {
+          "title": "CE账号",
+          "path": "/config/account"
+        },
+        {
+          "title": "语法",
+          "path": "/config/command"
+        }
+      ]
+    }
+  ]
+}
