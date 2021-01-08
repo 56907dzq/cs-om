@@ -1,15 +1,18 @@
 import {
     chakra,
     Flex,
+    Image,
     IconButton,
     useColorMode,
     useColorModeValue,
     useDisclosure,
     useUpdateEffect,
   } from "@chakra-ui/react"
-  import { useViewportScroll } from "framer-motion"
   import React from "react"
   import { FaMoon, FaSun } from "react-icons/fa"
+  import Logo from "../components/logo.tsx"
+  import NextLink from "next/link"
+  import { useViewportScroll } from "framer-motion"
   import { MobileNavButton, MobileNavContent } from "../components/mobile-nav.tsx"
   
   const DiscordIcon = (props) => (
@@ -39,6 +42,14 @@ import {
     return (
       <>
         <Flex w="100%" h="100%" px="6" align="center" justify="space-between">
+          <Flex align="center">
+            <NextLink href="/CE" passHref>
+              <chakra.a display="block" aria-label="Chakra UI, Back to homepage">
+                {/* <Logo /> */}
+                <Image src="http://localhost:4000/logo.png" htmlHeight="41" htmlWidth="116" alt="Segun Adebayo" />
+              </chakra.a>
+            </NextLink>
+          </Flex>
           <Flex
             justify="flex-end"
             w="100%"
@@ -70,14 +81,23 @@ import {
   
   function Header(props) {
     const bg = useColorModeValue("white", "gray.800")
+    const ref = React.useRef()
     const [y, setY] = React.useState(0)
     const { scrollY } = useViewportScroll()
+    const { height = 0 } = function(){
+      if(ref.current)
+        return ref.current.getBoundingClientRect()
+      else
+        return {}
+    }
     React.useEffect(() => {
       return scrollY.onChange(() => setY(scrollY.get()))
     }, [scrollY])
   
     return (
       <chakra.header
+        ref={ref}
+        shadow={y > height ? "sm" : undefined}
         transition="box-shadow 0.2s"
         pos="fixed"
         top="0"

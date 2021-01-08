@@ -14,7 +14,6 @@ import SidebarLink from "./sidebar-link"
 import SidebarRouter from '../../configs/sidebar.json'
 import { MdSettings } from "react-icons/md"
 import NextLink from "next/link"
-import _ from "lodash"
 
 export function getRoutes(slug) {
   if (slug.startsWith('/config')) {
@@ -128,9 +127,10 @@ const MainNavLinkGroup = (props) => {
 
 const Sidebar = ({routes}) => {
   const { pathname } = useRouter()
-
+  const ref = React.useRef(null)
   return (
     <Box
+      ref={ref}
       as="nav"
       aria-label="Main Navigation"
       pos="sticky"
@@ -149,8 +149,8 @@ const Sidebar = ({routes}) => {
       flexShrink={0}
       display={{ base: "none", md: "block" }}
     >
-      <MainNavLinkGroup mb="10" />
-      <SidebarContent routes={routes} pathname={pathname} />
+      <MainNavLinkGroup my="10" />
+      <SidebarContent routes={routes} pathname={pathname} contentRef={ref} />
     </Box>
   )
 }

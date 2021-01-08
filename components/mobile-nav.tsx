@@ -9,6 +9,7 @@ import {
   IconButtonProps,
   useColorModeValue,
   useUpdateEffect,
+  Image
 } from "@chakra-ui/react"
 import { AnimatePresence, motion, useElementScroll } from "framer-motion"
 import NextLink from "next/link"
@@ -95,18 +96,17 @@ export function MobileNavContent(props: MobileNavContentProps) {
             >
               <Box>
                 <Flex justify="space-between" px="6" pt="5" pb="4">
-                  <Logo />
+                  {/* <Logo /> */}
+                  <Image src="http://localhost:4000/logo.png" htmlHeight="41" htmlWidth="116" alt="Segun Adebayo" />
                   <HStack spacing="5">
                     <CloseButton ref={closeBtnRef} onClick={onClose} />
                   </HStack>
                 </Flex>
                 <Box px="6" pb="6" pt="2" shadow={shadow}>
                   <HStack>
-                    <NavLink href="/docs/getting-started">Docs</NavLink>
-                    <NavLink href="/guides/integrations/with-cra">
-                      Guides
-                    </NavLink>
-                    <NavLink href="/team">Team</NavLink>
+                    <NavLink href="/CE">CE</NavLink>
+                    <NavLink href="/PE">PE</NavLink>
+                    <NavLink href="/config/mgm">config</NavLink>
                   </HStack>
                 </Box>
               </Box>
