@@ -1,7 +1,6 @@
 import {
     chakra,
     Flex,
-    Image,
     IconButton,
     useColorMode,
     useColorModeValue,
@@ -9,11 +8,11 @@ import {
     useUpdateEffect,
   } from "@chakra-ui/react"
   import React from "react"
+  import Image from 'next/image'
   import { FaMoon, FaSun } from "react-icons/fa"
-  import Logo from "../components/logo.tsx"
   import NextLink from "next/link"
   import { useViewportScroll } from "framer-motion"
-  import { MobileNavButton, MobileNavContent } from "../components/mobile-nav.tsx"
+  import { MobileNavButton, MobileNavContent } from "components/mobile-nav.tsx"
   
   const DiscordIcon = (props) => (
     <svg viewBox="0 0 146 146" {...props}>
@@ -46,7 +45,14 @@ import {
             <NextLink href="/CE" passHref>
               <chakra.a display="block" aria-label="Chakra UI, Back to homepage">
                 {/* <Logo /> */}
-                <Image src="http://localhost:4000/logo.png" htmlHeight="41" htmlWidth="116" alt="Segun Adebayo" />
+                {/* src="http://localhost:4000/logo.png" */}
+                <Image
+                  src="/logo.png"
+                  alt="Feixin Logo"
+                  priority
+                  width={116}
+                  height={41}
+                />
               </chakra.a>
             </NextLink>
           </Flex>

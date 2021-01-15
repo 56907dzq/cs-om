@@ -11,14 +11,13 @@ import {
   Flex,
   Spacer,
   Icon,
-  Input,
-  Button,
   IconButton,
   Tooltip,
   useTheme,
   useColorMode,
   useColorModeValue,
-  Table, TableCaption, Thead, Tbody, Tr, Th, Td
+  Table, TableCaption, Thead, Tbody, Tr, Th, Td,
+  Editable, EditableInput, EditablePreview
 } from "@chakra-ui/react"
 
 import { 
@@ -34,7 +33,6 @@ import { remoteDelete, remoteAdd }  from 'util/requests'
 import GlobalFilter from './GlobalFilter'
 import MGMDialog from './MGMDialog'
 
-//自定义checkbox
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
     const defaultRef = React.useRef()
@@ -52,26 +50,6 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 )
 
-//自定义更新按钮
-const UpdateButton = React.forwardRef(
-  ({original}, ref) => {
-    const defaultRef = React.useRef()
-    const resolvedRef = ref || defaultRef
-    // React.useEffect(() => {
-    //   resolvedRef.current.indeterminate = indeterminate
-    // }, [resolvedRef, indeterminate])
-    const update = () => {
-      console.log(original)
-    }
-    return (
-      <>
-        <Button colorScheme="teal" onClick={update} ref={resolvedRef} >上传</Button>
-      </>
-    )
-  }
-)
-
-//可编辑单元格
 const EditableCell = ({
   value: initialValue,
   row: { index },
@@ -81,10 +59,9 @@ const EditableCell = ({
   // We need to keep and update the state of the cell normally
   const [value, setValue] = React.useState(initialValue)
 
-  const onChange = e => {
-    setValue(e.target.value)
+  const onChange = ({ target: { value } }) => {
+    setValue(value)
   }
-
   // We'll only update the external data when the input is blurred
   const onBlur = () => {
     updateMyData(index, id, value)
@@ -94,45 +71,21 @@ const EditableCell = ({
   React.useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
-
-  return <Input 
-          variant="filled" 
-          bgColor = "transparent" 
-          value={value} 
-          onChange={onChange} 
-          onBlur={onBlur}
-          _hover={{ background: "transparent" }}
-         />
+  // Click the text to edit
+          
+  return  <Editable defaultValue="" lineHeight='1.2rem' value={value} submitOnBlur={onBlur} >
+            <EditablePreview py={3} px="aoto" />
+            <EditableInput onChange={onChange} maxW={20} />
+          </Editable>
 }
 
-//默认可编辑单元格
 const defaultColumn = {
   Cell: EditableCell,
 }
 
 
-const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
+const EnhancedTable = ({ columns, data, setData, updateMyData, tableHeading }) => {
   // Use the state and functions returned from useTable to build your UI
-  const [skipPageReset, setSkipPageReset] = React.useState(false)
-
-  const updateMyData = (rowIndex, columnId, value) => {
-    // We also turn on the flag to not reset the page
-    setSkipPageReset(true)
-    setData(old =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...old[rowIndex],
-            [columnId]: value,
-          }
-        }
-        return row
-      })
-    )
-  }
-  React.useEffect(() => {
-    setSkipPageReset(false)
-  }, [data])
   const {
     getTableProps,
     getTableBodyProps,
@@ -156,7 +109,7 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
       columns,
       data,
       defaultColumn,
-      autoResetPage: !skipPageReset,
+      autoResetPage:false,
       updateMyData
     },
     useGlobalFilter,
@@ -184,19 +137,6 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
           ),
         },
         ...columns,
-        {
-          id: 'update',
-          Header: () => (
-            <Box>
-              更新
-            </Box>
-          ),
-          Cell: ({ row }) => (
-            <div>
-              <UpdateButton {...row}  />
-            </div>
-          ),
-        }
       ])
     }
   )
@@ -207,13 +147,10 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
   const scrollbarHover = { dark: 'whiteAlpha.400', light: 'blackAlpha.400' };
   const scrollbarBg = { dark: 'whiteAlpha.50', light: 'blackAlpha.50' };
   const theme = useTheme();
-  
   let numSelected = Object.keys(selectedRowIds).length
-
   const removeByIndexs = (array, indexs) => 
     array.filter((_, i) => !indexs.includes(i))
-  
-  //添加 
+   
   const addHandler = postdata => {
     let upData = new FormData();
     Object.keys(postdata).forEach( key => upData.append(key,postdata[key]))
@@ -227,7 +164,6 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
     .catch(error => console.error(error))
   }
 
-  //删除
   const deleteHandler = event => {
     let upData = new FormData();
     upData.append("id", selectedFlatRows[0].original.id);
@@ -246,7 +182,7 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
   // Render the UI for your table
   return (
     <>
-      {/* <pre>
+      <pre>
         <code>
           {JSON.stringify(
             {
@@ -261,7 +197,7 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
             2
           )}
         </code>
-      </pre> */}
+      </pre>
       <Table size='md' {...getTableProps()}
         variant="striped"
         colorScheme="teal"
@@ -303,6 +239,7 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
             )}
           </HStack>
         </TableCaption>
+      {/* {!!tableHeading && <TableCaption fontSize="md" pb={[2,4]} mt={[0,'1rem']} >{tableHeading}</TableCaption>} */}
         <Thead >
           {headerGroups.map(headerGroup => (
             <Tr {...headerGroup.getHeaderGroupProps()}
@@ -316,10 +253,11 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
                 <Th {...column.getHeaderProps(column.getSortByToggleProps())}
                   key={column.id}
                   p="1rem"
+                  textAlign="center"
                   whiteSpace="nowrap"
                   >
                   {column.render('Header')}
-                  {['selection','update'].includes(column.id) ? null : (
+                  {column.id !== 'selection' ? (
                     <Box as="span" pl={1}>
                     {column.isSorted
                     ? column.isSortedDesc
@@ -327,7 +265,8 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
                         : <Icon boxSize="1rem" as={MdArrowUpward} />
                     : ''}
                   </Box> 
-                  )}               
+                  ) : null}
+                  
                 </Th>
               ))}
             </Tr>
@@ -412,6 +351,9 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
           </HStack>
         </TableCaption>
       </Table>
+
+    
+
         {/* <select
           value={pageSize}
           onChange={e => {
@@ -424,7 +366,7 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
             </option>
           ))}
         </select> */}
-        {/* <pre>
+        <pre>
           <code>
             {JSON.stringify(
               {
@@ -437,7 +379,7 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
               2
             )}
           </code>
-        </pre> */}
+        </pre>
     </>
   )
 }

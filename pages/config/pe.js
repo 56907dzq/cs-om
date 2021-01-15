@@ -1,5 +1,8 @@
 import Head from 'next/head'
-import Layout from '../../layouts/layout'
+import Layout from 'layouts/layout'
+import { remoteGet }  from 'util/requests'
+
+
 
 export default function Home() {
   return (
@@ -7,12 +10,6 @@ export default function Home() {
       <Head>
         <title>config</title>
       </Head>
-      <section>
-        <p>[Your Self Introduction]</p>
-        <p>
-            nothing have
-        </p>
-      </section>
     </Layout>
   )
 }

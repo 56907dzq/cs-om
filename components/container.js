@@ -7,7 +7,7 @@ export const Container = (props) => (
       pb="12"
       pt="3"
       mx="auto"
-      maxW="75rem"
+      maxW="80rem"
       px={{ base: "2", md: "6" }}
       {...props}
     />

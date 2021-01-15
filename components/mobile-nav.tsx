@@ -1,3 +1,10 @@
+import React from "react"
+import NextLink from "next/link"
+import { useRouter } from "next/router"
+import { AiOutlineMenu } from "react-icons/ai"
+import { RemoveScroll } from "react-remove-scroll"
+import { SidebarContent, getRoutes } from "layouts/sidebar/sidebar"
+import { AnimatePresence, motion, useElementScroll } from "framer-motion"
 import {
   Box,
   BoxProps,
@@ -11,14 +18,7 @@ import {
   useUpdateEffect,
   Image
 } from "@chakra-ui/react"
-import { AnimatePresence, motion, useElementScroll } from "framer-motion"
-import NextLink from "next/link"
-import { useRouter } from "next/router"
-import * as React from "react"
-import { AiOutlineMenu } from "react-icons/ai"
-import { RemoveScroll } from "react-remove-scroll"
-import Logo from "./logo.tsx"
-import { SidebarContent, getRoutes } from "../layouts/sidebar/sidebar"
+
 
 
 function NavLink({ href, children }) {

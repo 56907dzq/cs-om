@@ -11,7 +11,7 @@ import {
 import * as React from "react"
 import { useRouter } from "next/router"
 import SidebarLink from "./sidebar-link"
-import SidebarRouter from '../../configs/sidebar.json'
+import SidebarRouter from 'configs/sidebar.json'
 import { MdSettings } from "react-icons/md"
 import NextLink from "next/link"
 
@@ -127,10 +127,9 @@ const MainNavLinkGroup = (props) => {
 
 const Sidebar = ({routes}) => {
   const { pathname } = useRouter()
-  const ref = React.useRef(null)
+
   return (
     <Box
-      ref={ref}
       as="nav"
       aria-label="Main Navigation"
       pos="sticky"
@@ -140,17 +139,15 @@ const Sidebar = ({routes}) => {
       top="6.5rem"
       w="280px"
       h="calc(((100vh - 1.5rem) - 64px) - 42px);"
-      pr="8"
-      pb="8"
-      pl="3"
-      pt="8"
+      p="8"
+      maxH="480px"
       overflowY="auto"
       className="sidebar-content"
       flexShrink={0}
       display={{ base: "none", md: "block" }}
     >
-      <MainNavLinkGroup my="10" />
-      <SidebarContent routes={routes} pathname={pathname} contentRef={ref} />
+      <MainNavLinkGroup mb="10" />
+      <SidebarContent routes={routes} pathname={pathname} />
     </Box>
   )
 }

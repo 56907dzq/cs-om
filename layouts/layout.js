@@ -1,9 +1,9 @@
 import Head from 'next/head'
-import Container from "../components/container"
+import Container from "components/container"
 import Header from "./header"
 import Sidebar from './sidebar/sidebar' 
-import { Box, Divider, HStack } from "@chakra-ui/react"
-import PageTransition from "../components/page-transition.tsx"
+import { Box, Flex, Divider, HStack } from "@chakra-ui/react"
+import PageTransition from "components/page-transition.tsx"
 
 
 export default function Layout({ children }) {  
@@ -16,35 +16,31 @@ export default function Layout({ children }) {
         <ColorModeSwitcher justifySelf="flex-end" />
       </Grid> */}
       <Header />
-      <Container as="main" className="main-content">
-        <Box display={{ base: "block", md: "flex" }}>
+      <Container as="main" className="main-content" >
+        <Box display={{ base: "block", md: "flex" }} >
           <Sidebar />
-          <HStack pr={10} pt={10}>
+          <HStack pr={10} pt="5rem">
             <Divider orientation="vertical" />
-          </HStack>
-          <Box  
-            overflowX={{
-              base: "auto", // 0-48em
-              md: "none", // 48em-80em,
-              xl: "none", // 80em+
-            }}
-            display="flex"
-            px={[0,3,6,9]}
-          >
+          </HStack>  
+          <Flex
+            mt={[0,10,20]}
+            shrink='0'
+            grow='1'
+            justifySelf="stretch"
+            overflowX='auto'
+            >
             <Box
               id="content"
-              pt={3}
               px={2}
-              mt={[4,12,20]}
-              mx="auto"
-              maxW="52rem"
+              w='100%' 
+              maxW="56rem"
               minH="76vh"
             >
               <PageTransition>
                 {children}
               </PageTransition>
             </Box>
-          </Box>
+          </Flex>   
         </Box>
       </Container>
     </>

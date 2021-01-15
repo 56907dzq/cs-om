@@ -1,4 +1,4 @@
-import * as React from "react"
+import React from "react"
 
 // 1. import `ChakraProvider` component
 import { ChakraProvider } from "@chakra-ui/react"
