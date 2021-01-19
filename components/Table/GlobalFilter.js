@@ -1,13 +1,13 @@
 import React from 'react'
-import { InputGroup, InputLeftElement, Input} from "@chakra-ui/react"
+import { InputGroup, InputLeftElement, Input } from "@chakra-ui/react"
 import PropTypes from 'prop-types'
 import { MdSearch } from "react-icons/md"
 
 
 const GlobalFilter = ({
+  preGlobalFilteredRows,
   globalFilter,
-  setGlobalFilter,
-  preGlobalFilteredRows
+  setGlobalFilter
 }) => {
   const count = preGlobalFilteredRows.length
   return (
@@ -18,19 +18,20 @@ const GlobalFilter = ({
         children={<MdSearch color="gray.300" />}
       />
       <Input
-        value={globalFilter || ''}
+        value={globalFilter || ""}
         onChange={e => {
-          setGlobalFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+          setGlobalFilter(e.target.value || undefined)
         }}
+        
         placeholder={`${count} records...`} 
         aria-label="search"
-        />
+      />
     </InputGroup>
   )
 }
 
 GlobalFilter.propTypes = {
-  // globalFilter: PropTypes.string.isRequired,
+  preGlobalFilteredRows: PropTypes.array.isRequired,
   setGlobalFilter: PropTypes.func.isRequired,
 }
 

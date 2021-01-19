@@ -106,8 +106,8 @@ const mainNavLinks = [
   },
   {
     icon: <Icon as={MdSettings} color="gray.50" />,
-    href: "/help",
-    label: "help",
+    href: "/log",
+    label: "log",
   },
 ]
 
@@ -125,7 +125,7 @@ const MainNavLinkGroup = (props) => {
   )
 }
 
-const Sidebar = ({routes}) => {
+const Sidebar = () => {
   const { pathname } = useRouter()
 
   return (
@@ -147,7 +147,7 @@ const Sidebar = ({routes}) => {
       display={{ base: "none", md: "block" }}
     >
       <MainNavLinkGroup mb="10" />
-      <SidebarContent routes={routes} pathname={pathname} />
+      <SidebarContent pathname={pathname} />
     </Box>
   )
 }

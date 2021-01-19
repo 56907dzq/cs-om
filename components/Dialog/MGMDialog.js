@@ -6,11 +6,8 @@ import {
   Input,
   Button, 
   Switch,
-  Spinner, 
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -89,10 +86,10 @@ const MGMDialog = props => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader> Add MGM </ModalHeader>
+          <ModalHeader> Add MGM Server </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>key_file</FormLabel>
               <Input 
                 variant="flushed" 
@@ -101,7 +98,7 @@ const MGMDialog = props => {
                 placeholder="ssh密钥存储位置"
                 onChange={handleChange('key_file')} />
             </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isRequired>
               <FormLabel>server_ip</FormLabel>
               <Input 
                 variant="flushed" 
@@ -109,7 +106,7 @@ const MGMDialog = props => {
                 placeholder="MGM服务器IP"
                 onChange={handleChange('server_ip')} />
             </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isRequired>
               <FormLabel>login_username</FormLabel>
               <Input 
                 variant="flushed" 
@@ -125,7 +122,7 @@ const MGMDialog = props => {
                 placeholder="登录密码"
                 onChange={handleChange('login_password')} />
             </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isRequired>
               <FormLabel>server_name</FormLabel>
               <Input 
                 variant="flushed" 

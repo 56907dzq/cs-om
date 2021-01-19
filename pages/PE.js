@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Layout from 'layouts/layout'
 
-export default function Home() {
+export default function PE() {
   return (
     <Layout>
       <Head>

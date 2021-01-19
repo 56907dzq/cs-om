@@ -2,20 +2,19 @@ import React from 'react'
 import { 
   useTable,
   useSortBy, 
-  useGlobalFilter, 
+  useGlobalFilter,
   usePagination, 
   useRowSelect } from 'react-table'
 import { 
   Box,
   HStack,
-  Flex,
   Spacer,
   Icon,
   Input,
   Button,
   IconButton,
+  Checkbox,
   Tooltip,
-  useTheme,
   useColorMode,
   useColorModeValue,
   Table, TableCaption, Thead, Tbody, Tr, Th, Td
@@ -30,9 +29,9 @@ import {
   MdLastPage,
   MdDelete
 } from "react-icons/md"
-import { remoteDelete, remoteAdd }  from 'util/requests'
+import { remoteDelete, remoteAdd, remoteUpdate }  from 'util/requests'
 import GlobalFilter from './GlobalFilter'
-import MGMDialog from './MGMDialog'
+import { mutate } from 'swr'
 
 //自定义checkbox
 const IndeterminateCheckbox = React.forwardRef(
@@ -46,26 +45,7 @@ const IndeterminateCheckbox = React.forwardRef(
 
     return (
       <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    )
-  }
-)
-
-//自定义更新按钮
-const UpdateButton = React.forwardRef(
-  ({original}, ref) => {
-    const defaultRef = React.useRef()
-    const resolvedRef = ref || defaultRef
-    // React.useEffect(() => {
-    //   resolvedRef.current.indeterminate = indeterminate
-    // }, [resolvedRef, indeterminate])
-    const update = () => {
-      console.log(original)
-    }
-    return (
-      <>
-        <Button colorScheme="teal" onClick={update} ref={resolvedRef} >上传</Button>
+        <Checkbox bgColor="gray.300" ref={resolvedRef} {...rest} />
       </>
     )
   }
@@ -110,29 +90,41 @@ const defaultColumn = {
   Cell: EditableCell,
 }
 
-
-const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
-  // Use the state and functions returned from useTable to build your UI
+const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
+  // UI rebuild
   const [skipPageReset, setSkipPageReset] = React.useState(false)
-
+  //自定义更新方法
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
-    setSkipPageReset(true)
-    setData(old =>
-      old.map((row, index) => {
+    setSkipPageReset(true);
+    mutate(`/${url}/search`, () =>
+      data.map((row, index) => {
         if (index === rowIndex) {
           return {
-            ...old[rowIndex],
+            ...data[rowIndex],
             [columnId]: value,
           }
         }
         return row
       })
+      , false);
+  }
+  //自定义更新按钮
+  const UpdateButton = ({original}) => {
+    const update = async () => {
+      let upData = new FormData();
+      Object.keys(original).forEach( key => upData.append(key,original[key]))
+      await remoteUpdate(url, upData)
+      //重新获取
+      mutate(`/${url}/search`)
+    }
+
+    return (
+      <>
+        <Button colorScheme="teal" size="sm" mr={2} onClick={update} >上传</Button>
+      </>
     )
   }
-  React.useEffect(() => {
-    setSkipPageReset(false)
-  }, [data])
   const {
     getTableProps,
     getTableBodyProps,
@@ -148,9 +140,8 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
     previousPage,
     preGlobalFilteredRows,
     setGlobalFilter,
-    setPageSize,
     selectedFlatRows,
-    state: { pageIndex, pageSize, selectedRowIds, globalFilter},
+    state: { pageIndex, selectedRowIds, globalFilter},
   } = useTable(
     {
       columns,
@@ -170,11 +161,11 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
           id: 'selection',
           // The header can use the table's getToggleAllRowsSelectedProps method
           // to render a checkbox
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-            </div>
-          ),
+          // Header: ({ getToggleAllPageRowsSelectedProps }) => (
+          //   <div>
+          //     <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+          //   </div>
+          // ),
           // The cell can use the individual row's getToggleRowSelectedProps method
           // to the render a checkbox
           Cell: ({ row }) => (
@@ -193,56 +184,61 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
           ),
           Cell: ({ row }) => (
             <div>
-              <UpdateButton {...row}  />
+              <UpdateButton {...row} />
             </div>
           ),
         }
       ])
     }
   )
-  const { colorMode } = useColorMode();
-  const bg = useColorModeValue("whiteAlpha.50", "blackAlpha.50")
-  const hoverBg = { dark: 'whiteAlpha.50', light: 'blackAlpha.50' };
-  const scrollbar = { dark: 'whiteAlpha.300', light: 'blackAlpha.300' };
-  const scrollbarHover = { dark: 'whiteAlpha.400', light: 'blackAlpha.400' };
-  const scrollbarBg = { dark: 'whiteAlpha.50', light: 'blackAlpha.50' };
-  const theme = useTheme();
-  
-  let numSelected = Object.keys(selectedRowIds).length
 
-  const removeByIndexs = (array, indexs) => 
-    array.filter((_, i) => !indexs.includes(i))
+  React.useEffect(() => {
+    setSkipPageReset(false)
+  }, [data])
+
+  const { colorMode } = useColorMode();
+  const thBg = useColorModeValue("whiteAlpha.50", "blackAlpha.50")
+  const thBg_hover = { dark: 'whiteAlpha.50', light: 'blackAlpha.50' };
+  const capBg = { dark: "red.800", light: "rgb(255, 226, 236)"};
+
+
+  // const color = useColorModeValue("white", "gray.800")
+  
+  //选择的行数
+  let numSelected = Object.keys(selectedRowIds).length
   
   //添加 
-  const addHandler = postdata => {
+  const addHandler = async (postdata) => {
+    //本地立即添加
+    const newData = data.concat([postdata])
+    mutate(`/${url}/search`, newData ,false)
+    // setData(newData) 方式二 需更改一些代码
+    //远端添加
     let upData = new FormData();
     Object.keys(postdata).forEach( key => upData.append(key,postdata[key]))
-    remoteAdd('/s_mgm_server/add', upData)
-    .then(res => {
-      if(res.result=="success!"){
-        const newData = data.concat([postdata])
-        setData(newData)
-      }
-    })
-    .catch(error => console.error(error))
+    await remoteAdd(url, upData)
+    //重新获取
+    mutate(`/${url}/search`)
   }
-
   //删除
-  const deleteHandler = event => {
+  const removeByIndexs = (array, indexs) => 
+  array.filter((_, i) => !indexs.includes(i))
+  
+  const deleteHandler = async () => {
+    //本地立即删除
+    const newData = removeByIndexs(
+      data,
+      Object.keys(selectedRowIds).map(x => parseInt(x, 10))
+    )
+    mutate(`/${url}/search`, newData, false)
+    //远端删除
     let upData = new FormData();
     upData.append("id", selectedFlatRows[0].original.id);
-    remoteDelete('/s_mgm_server/delete', upData)
-    .then(res => {
-      if(res.result=="success!"){
-        const newData = removeByIndexs(
-          data,
-          Object.keys(selectedRowIds).map(x => parseInt(x, 10))
-        )
-        setData(newData)
-      }
-    })
-    .catch(error => console.error(error))
+    await remoteDelete(url, upData)
+    //重新获取
+    mutate(`/${url}/search`)
   }
+
   // Render the UI for your table
   return (
     <>
@@ -270,8 +266,8 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
           <Box py={[0,2]}>
             {tableHeading}
           </Box>
-          <HStack bgColor={numSelected > 0? 'rgb(255, 226, 236)' : "" }>
-            <MGMDialog  addHandler={addHandler} />
+          <HStack bgColor={numSelected > 0? capBg[colorMode] : "" }>
+            {dialog(addHandler)}
             {numSelected > 0 ? (
               <>
                 <Box as="span" color="tomato">
@@ -308,9 +304,9 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
             <Tr {...headerGroup.getHeaderGroupProps()}
              _hover={{
               cursor: 'pointer',
-                backgroundColor: hoverBg[colorMode],
+                backgroundColor: thBg_hover[colorMode],
               }}
-              bg={bg}
+              bg={thBg}
             >
               {headerGroup.headers.map(column => (
                 <Th {...column.getHeaderProps(column.getSortByToggleProps())}
@@ -337,9 +333,9 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
           {page.map((row, i) => {
             prepareRow(row)
             return (
-              <Tr {...row.getRowProps()}>
+              <Tr {...row.getRowProps()} pr={2} >
                 {row.cells.map(cell => {
-                  return <Td textAlign="center" p={1} whiteSpace="nowrap" {...cell.getCellProps()}>{cell.render('Cell')}</Td>
+                  return <Td p={1} textAlign="center" whiteSpace="nowrap" {...cell.getCellProps()}>{cell.render('Cell')}</Td>
                 })}
               </Tr>
             )
@@ -399,8 +395,9 @@ const EnhancedTable = ({ columns, data, setData, tableHeading }) => {
               <Box>
                 Go to page:
               </Box>
-              <input
+              <Input
                 type="number"
+                bgColor={thBg}
                 defaultValue={pageIndex + 1}
                 onChange={e => {
                   const page = e.target.value ? Number(e.target.value) - 1 : 0

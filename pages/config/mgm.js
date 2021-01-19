@@ -1,11 +1,15 @@
-import React, { useMemo, useState } from "react"
 import Head from 'next/head'
 import Layout from 'layouts/layout'
+import { useMemo } from "react"
 import EnhancedTable from 'components/Table/Table'
+import MGMDialog from 'components/Dialog/MGMDialog'
+import { remoteGet } from 'util/requests'
+
+const url = 's_mgm_server'
 
 export async function getStaticProps(context) {
 
-  const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/s_mgm_server/search')
+  const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/${url}/search`)
   const originData = await res.json()
 
   return {
@@ -17,7 +21,9 @@ export async function getStaticProps(context) {
 
 
 export default function Mgm({ originData }) {
-  const [data, setData] = React.useState(React.useMemo(() => originData, []))
+  
+  const data =  remoteGet(`/${url}/search`, useMemo(() => originData, []))
+  // const [data, setData] = useState(useMemo(() => originData, []))
   const columns = useMemo(
     () =>[
           {
@@ -51,9 +57,17 @@ export default function Mgm({ originData }) {
   return (
     <Layout>
       <Head>
-        <title>config</title>
+        <title>config/mgm</title>
       </Head>
-      <EnhancedTable columns={columns} data={data} setData={setData} tableHeading="MGM"/>
+      <EnhancedTable 
+        url={url}
+        data={data}
+        columns={columns} 
+        tableHeading="MGM SERVER" 
+        dialog={addHandler => (
+          <MGMDialog addHandler={addHandler} />
+        )}
+      />
     </Layout>
   )
 }
