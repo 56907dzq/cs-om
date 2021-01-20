@@ -13,7 +13,6 @@ import {
   Input,
   Button,
   IconButton,
-  Checkbox,
   Tooltip,
   useColorMode,
   useColorModeValue,
@@ -45,7 +44,7 @@ const IndeterminateCheckbox = React.forwardRef(
 
     return (
       <>
-        <Checkbox bgColor="gray.300" ref={resolvedRef} {...rest} />
+        <input type="checkbox" ref={resolvedRef} {...rest} />
       </>
     )
   }

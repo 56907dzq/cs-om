@@ -37,7 +37,7 @@ export async function remoteDelete(url, formData) {
   .then(res => {
     if(res.result=="success!"){
       toast({
-        title: `an ${url.slice(2,-1)} deleted.`,
+        title: `an ${url.slice(2)} deleted.`,
         status: "success",
         description: res.result,
         duration: 6000,
@@ -63,7 +63,7 @@ export async function remoteAdd(url, formData) {
   .then(res => {
     if(res.result=="success!"){
       toast({
-        title: `an ${url.slice(2,-1)} created.`,
+        title: `an ${url.slice(2)} created.`,
         status: "success",
         description: res.result,
         duration: 6000,
@@ -90,7 +90,7 @@ export async function remoteUpdate(url, formData) {
   .then(res => {
     if(res.result=="success!"){
       toast({
-        title: `an ${url.slice(2,-1)} updated.`,
+        title: `an ${url.slice(2)} updated.`,
         status: "success",
         description: res.result,
         duration: 6000,
