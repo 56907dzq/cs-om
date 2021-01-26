@@ -1,4 +1,5 @@
 import React from "react"
+import Image from 'next/image' 
 import NextLink from "next/link"
 import { useRouter } from "next/router"
 import { AiOutlineMenu } from "react-icons/ai"
@@ -15,8 +16,7 @@ import {
   IconButton,
   IconButtonProps,
   useColorModeValue,
-  useUpdateEffect,
-  Image
+  useUpdateEffect
 } from "@chakra-ui/react"
 
 
@@ -96,8 +96,13 @@ export function MobileNavContent(props: MobileNavContentProps) {
             >
               <Box>
                 <Flex justify="space-between" px="6" pt="5" pb="4">
-                  {/* <Logo /> */}
-                  <Image src="http://localhost:4000/logo.png" htmlHeight="41" htmlWidth="116" alt="Segun Adebayo" />
+                  <Image
+                    src="/logo.png"
+                    alt="Feixin Logo"
+                    priority
+                    width={116}
+                    height={41}
+                  />
                   <HStack spacing="5">
                     <CloseButton ref={closeBtnRef} onClick={onClose} />
                   </HStack>

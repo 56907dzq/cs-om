@@ -1,11 +1,17 @@
 
-import useSWR, { mutate } from 'swr'
+import useSWR from 'swr'
 import { createStandaloneToast } from "@chakra-ui/react"
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL
 const toast = createStandaloneToast()
 
-export const fetcher = (url) => fetch(base_url + url).then(res => res.json())
+export const fetcher = (url) => fetch(base_url + url).then(res => {
+  if (!res.ok) {
+    const error = new Error('request failed')
+    throw error
+  }
+  return res.json()
+})
 export const nocacheFetcher = (url,formData,method) => 
             fetch(base_url + url, {
               method, 
@@ -30,6 +36,15 @@ export const nocacheFetcher = (url,formData,method) =>
 export function remoteGet(url, originData){
   const { data } = useSWR(url, fetcher, {initialData: originData, revalidateOnFocus: false})
   return data
+}
+
+export function useCustomSWR (url){
+  const { data, error } = useSWR(url, fetcher, {revalidateOnFocus: false})
+  return {
+    data: data,
+    isLoading: !error && !data,
+    isError: error
+  }
 }
 
 export async function remoteDelete(url, formData) {

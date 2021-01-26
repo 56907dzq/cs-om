@@ -16,6 +16,7 @@ import {
   Tooltip,
   useColorMode,
   useColorModeValue,
+  Editable, EditableInput, EditablePreview,
   Table, TableCaption, Thead, Tbody, Tr, Th, Td
 } from "@chakra-ui/react"
 
@@ -42,11 +43,7 @@ const IndeterminateCheckbox = React.forwardRef(
       resolvedRef.current.indeterminate = indeterminate
     }, [resolvedRef, indeterminate])
 
-    return (
-      <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    )
+    return <input type="checkbox" ref={resolvedRef} {...rest} />
   }
 )
 
@@ -74,14 +71,23 @@ const EditableCell = ({
     setValue(initialValue)
   }, [initialValue])
 
-  return <Input 
-          variant="filled" 
-          bgColor = "transparent" 
-          value={value} 
-          onChange={onChange} 
-          onBlur={onBlur}
-          _hover={{ background: "transparent" }}
-         />
+  return <>
+          <Editable px={3} py={1}  value={value}  >
+            <EditablePreview minW="5rem" minH="26px" />
+            <EditableInput onChange={onChange} w="10rem" onSubmit={onBlur}  />
+          </Editable>
+          {/* <Input
+            variant="filled" 
+            minW="5rem"
+            bgColor = "transparent"
+            px={2} 
+            value={value} 
+            onChange={onChange} 
+            onBlur={onBlur}
+            _hover={{ background: "transparent" }}
+          /> */}
+        </>
+
 }
 
 //默认可编辑单元格
@@ -168,9 +174,9 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
           // The cell can use the individual row's getToggleRowSelectedProps method
           // to the render a checkbox
           Cell: ({ row }) => (
-            <div>
+            <Box textAlign="center">
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
+            </Box>
           ),
         },
         ...columns,
@@ -266,7 +272,7 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
             {tableHeading}
           </Box>
           <HStack bgColor={numSelected > 0? capBg[colorMode] : "" }>
-            {dialog(addHandler)}
+            {!!dialog && dialog(addHandler)}
             {numSelected > 0 ? (
               <>
                 <Box as="span" color="tomato">
@@ -334,7 +340,7 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
             return (
               <Tr {...row.getRowProps()} pr={2} >
                 {row.cells.map(cell => {
-                  return <Td p={1} textAlign="center" whiteSpace="nowrap" {...cell.getCellProps()}>{cell.render('Cell')}</Td>
+                  return <Td p={1} whiteSpace="nowrap" {...cell.getCellProps()}>{cell.render('Cell')}</Td>
                 })}
               </Tr>
             )

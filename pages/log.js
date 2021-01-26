@@ -1,23 +1,56 @@
 import Head from 'next/head'
 import Layout from 'layouts/layout'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import ServerTable from 'components/Table/baseTable'
+import { remoteGet } from 'util/requests'
 
-export default function Log() {
+
+const url = 's_log'
+
+export async function getServerSideProps(context) {
+
+  const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/${url}/search`)
+  const originData = await res.json()
+
+  if (!originData) {
+    return {
+      notFound: true,
+    }
+  }
+  
+  return {
+    props: {
+      originData
+    }
+  }
+}
+
+export default function Log({ originData }) {
+  const [data, setData] = useState(originData)
+  // const [loading, setLoading] = useState(false)
+  // const [pageCount, setPageCount] = useState(0)
+  // const fetchIdRef = React.useRef(0)
+  // const fetchData = useCallback(({ pageIndex }) => {
+  //   const fetchId = ++fetchIdRef.current
+  //   setLoading(true)
+  //   if (fetchId === fetchIdRef.current) {
+  //     setData()
+  //     setPageCount()
+  //     setLoading(false)
+  //   }
+  // }, [])
   return (
     <Layout>
       <Head>
-        <title>CE</title>
+        <title>Log</title>
       </Head>
-      <section>
-        <p>[Your Self Introduction]</p>
-        <p>
-        Chakra UI is a simple, modular and accessible component library
-              that gives you the building blocks you need to build your React
-              applications.Chakra UI is a simple, modular and accessible component library
-              that gives you the building blocks you need to build your React
-              applications.{' '}
-          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
-        </p>
-      </section>
+      {/* <ServerTable
+        columns={columns}
+        data={data}
+        fetchData={fetchData}
+        loading={loading}
+        pageCount={pageCount}
+      /> */}
     </Layout>
   )
 }

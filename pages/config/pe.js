@@ -7,7 +7,7 @@ import { remoteGet } from 'util/requests'
 
 const url = 's_pe_server'
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
 
   const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/${url}/search`)
   const originData = await res.json()
