@@ -1,5 +1,5 @@
 import React from 'react'
-import { InputGroup, InputLeftElement, Input } from "@chakra-ui/react"
+import { InputGroup, InputLeftElement, Input, Text, useColorModeValue } from "@chakra-ui/react"
 import PropTypes from 'prop-types'
 import { MdSearch } from "react-icons/md"
 
@@ -10,6 +10,7 @@ const GlobalFilter = ({
   setGlobalFilter
 }) => {
   const count = preGlobalFilteredRows.length
+  const placeholderColor = useColorModeValue('gray.400', 'whiteAlpha.700');
   return (
     <InputGroup w="200px">
       <InputLeftElement
@@ -22,8 +23,10 @@ const GlobalFilter = ({
         onChange={e => {
           setGlobalFilter(e.target.value || undefined)
         }}
-        
-        placeholder={`${count} records...`} 
+        _placeholder={{color:placeholderColor}}
+        placeholder={
+            `${count} records...`
+        }
         aria-label="search"
       />
     </InputGroup>

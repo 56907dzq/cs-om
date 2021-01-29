@@ -44,6 +44,7 @@ export default function Log({ originData }) {
       <Head>
         <title>Log</title>
       </Head>
+      <p>log</p>
       {/* <ServerTable
         columns={columns}
         data={data}

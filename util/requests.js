@@ -1,6 +1,8 @@
 
 import useSWR from 'swr'
 import { createStandaloneToast } from "@chakra-ui/react"
+import { fetchWithTimeout } from './fetchWithTimeout.ts';
+import { useEffect } from 'react';
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL
 const toast = createStandaloneToast()
@@ -12,6 +14,76 @@ export const fetcher = (url) => fetch(base_url + url).then(res => {
   }
   return res.json()
 })
+
+//PE/CE
+export function useCustomSWR (url){ 
+  const { data, error } = useSWR(url, fetcher, {revalidateOnFocus: false, dedupingInterval: 30*60*1000})
+  return {
+    data: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
+
+export function useQuerySWR(query){
+  const { 
+    command = "", 
+    mgm = "", 
+    pe = "", 
+    ce = "",
+    ce_account = "",
+    target = "" 
+  } = query
+  const controller = new AbortController();
+
+  async function runQuery(...params) {
+
+    // console.log('mgm__id', params)
+    let upData = new FormData();
+    upData.append('mgm_id',params[0])
+    upData.append('check_command_id',params[1])
+    upData.append('host_ip',params[2])
+    upData.append('pe_id',params[3])
+    upData.append('ce_host_ip',params[4])
+    upData.append('ce_account_id',params[5])
+
+    return await fetchWithTimeout(
+      base_url+'/s_network_check/add',
+      {
+        method: 'POST',
+        body: upData,
+        cache: 'no-cache', 
+        mode: 'cors',
+        redirect: 'follow', 
+        referrer: 'no-referrer', 
+      },
+      20 * 1000,
+      controller,
+    ).then(res => {
+      if (!res.ok) {
+        const error = new Error('request failed')
+        throw error
+      }
+      return res.json()
+    })
+    
+  }
+
+  // Cancel any still-running queries on unmount.
+  useEffect(
+    () => () => {
+      controller.abort();
+    },
+    [],
+  );
+
+  return useSWR([mgm,command,target,pe,ce,ce_account],
+    runQuery,
+    {revalidateOnFocus: false, errorRetryCount:1, dedupingInterval:0}
+    )
+}
+
+
 export const nocacheFetcher = (url,formData,method) => 
             fetch(base_url + url, {
               method, 
@@ -33,18 +105,10 @@ export const nocacheFetcher = (url,formData,method) =>
               })
             })
 
+//增删改查
 export function remoteGet(url, originData){
   const { data } = useSWR(url, fetcher, {initialData: originData, revalidateOnFocus: false})
   return data
-}
-
-export function useCustomSWR (url){
-  const { data, error } = useSWR(url, fetcher, {revalidateOnFocus: false})
-  return {
-    data: data,
-    isLoading: !error && !data,
-    isError: error
-  }
 }
 
 export async function remoteDelete(url, formData) {

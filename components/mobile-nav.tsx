@@ -73,7 +73,7 @@ export function MobileNavContent(props: MobileNavContentProps) {
   const [shadow, setShadow] = React.useState<string>()
 
   return (
-    <AnimatePresence>
+    <AnimatePresence key='mobile'>
       {isOpen && (
         <RemoveScroll forwardProps>
           <motion.div

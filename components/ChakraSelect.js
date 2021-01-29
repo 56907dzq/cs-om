@@ -1,21 +1,29 @@
 import * as React from 'react';
-import { Text, useColorMode, useTheme } from '@chakra-ui/react';
+import { Text, useColorMode, useTheme, useToken } from '@chakra-ui/react';
 import Select from 'react-select';
 
 export const ChakraSelect = React.forwardRef(
   ({ size, name:label, children, ...props }, ref) => {
     const theme = useTheme();
     const { colorMode } = useColorMode();
+    //大小
     const sizeMap = {
       lg: { height: theme.space[12] },
       md: { height: theme.space[10] },
       sm: { height: theme.space[8] },
     };
-    const colorSetPrimaryBg = {
-      dark: theme.colors.cyan[300],
-      light: theme.colors.cyan[500],
+    const { height } = sizeMap[size];
+    //placeholder
+    const placeholderColor = {
+      dark: theme.colors.whiteAlpha[600],
+      light: theme.colors.gray[400],
     };
-
+    //downicon
+    const downIcon = {
+      dark: theme.colors.cyan[600],
+      light: theme.colors.gray[500],
+    };
+    //背景&边框&颜色
     const bg = {
       dark: theme.colors.whiteAlpha[100],
       light: theme.colors.white,
@@ -24,39 +32,50 @@ export const ChakraSelect = React.forwardRef(
       dark: theme.colors.whiteAlpha[800],
       light: theme.colors.black,
     };
-    const borderFocused = theme.colors.blue[500];
-    const borderDisabled = theme.colors.whiteAlpha[100];
+    const inputColor = {
+      dark: theme.colors.whiteAlpha[800],
+      light: theme.colors.gray[500],
+    };
+    const borderFocused =  {
+      dark: theme.colors.blue[300],
+      light: theme.colors.blue[500]
+    };
     const border = {
       dark: theme.colors.whiteAlpha[50],
-      light: theme.colors.gray[100],
-    };
-    const borderRadius = theme.space[1];
-    const hoverColor = {
-      dark: theme.colors.whiteAlpha[200],
       light: theme.colors.gray[300],
     };
-    const { height } = sizeMap[size];
-    const optionBgActive = {
+    const hoverColor = {
       dark: theme.colors.cyan[400],
-      light: theme.colors.cyan[600],
+      light: theme.colors.gray[400],
     };
+    const borderRadius = theme.space[1];
+    //menu
+    const menuBg = {
+      dark: theme.colors.gray[700],
+      light: theme.colors.white,
+    };
+    //option
+    const selectedDisabled = theme.colors.whiteAlpha[400];
     const optionSelectedBg = {
       dark: theme.colors.whiteAlpha[400],
       light: theme.colors.blackAlpha[400],
     };
-    const selectedDisabled = theme.colors.whiteAlpha[400];
-    const placeholderColor = {
-      dark: theme.colors.whiteAlpha[700],
-      light: theme.colors.gray[600],
+    const optionHover = {
+      dark: theme.colors.teal[300],
+      light: theme.colors.teal[500],
     };
-    const menuBg = {
-      dark: theme.colors.black[800],
-      light: theme.colors.white[50],
-    };
-    const menuColor = {
-      dark: theme.colors.white,
+    const optionColor = {
+      dark: theme.colors.white[500],
       light: theme.colors.blackAlpha[800],
     };
+
+    const optionBgActive = {
+      dark: theme.colors.teal[400],
+      light: theme.colors.teal[600],
+    };
+    
+
+    //scrollbar
     const scrollbar = {
       dark: theme.colors.whiteAlpha[300],
       light: theme.colors.blackAlpha[300],
@@ -83,15 +102,31 @@ export const ChakraSelect = React.forwardRef(
             ...base,
             minHeight: height,
             backgroundColor: bg[colorMode],
-            color: color[colorMode],
-            borderColor: state.isDisabled
-              ? borderDisabled
-              : state.isFocused
-              ? borderFocused
+            borderColor: state.isFocused
+              ? borderFocused[colorMode]
               : border[colorMode],
             borderRadius: borderRadius,
+            color: color[colorMode],
             '&:hover': {
               borderColor: hoverColor[colorMode],
+            },
+          }),
+          clearIndicator: base => ({
+            ...base,
+            color: placeholderColor[colorMode],
+            '&:hover': {
+              color: downIcon[colorMode]
+            },
+          }),
+          indicatorSeparator: base => ({
+            ...base,
+            backgroundColor: placeholderColor[colorMode],
+          }),
+          dropdownIndicator: base => ({
+            ...base,
+            color: placeholderColor[colorMode],
+            '&:hover': {
+              color: downIcon[colorMode]
             },
           }),
           menu: base => ({
@@ -111,8 +146,17 @@ export const ChakraSelect = React.forwardRef(
             '&::-webkit-scrollbar-thumb:hover': {
               backgroundColor: scrollbarHover[colorMode],
             },
-
             '-ms-overflow-style': { display: 'none' },
+          }),
+          singleValue: base => ({
+            ...base,
+            color: color[colorMode],
+            fontSize: theme.fontSizes[size],
+          }),
+          input: base => ({
+            ...base,
+            color: inputColor[colorMode],
+            fontSize: theme.fontSizes[size]
           }),
           option: (base, state) => ({
             ...base,
@@ -121,39 +165,14 @@ export const ChakraSelect = React.forwardRef(
               : state.isSelected
               ? optionSelectedBg[colorMode]
               : state.isFocused
-              ? colorSetPrimaryBg[colorMode]
+              ? optionHover[colorMode]
               : 'transparent',
-            color: menuColor[colorMode],
+            color: optionColor[colorMode],
             fontSize: theme.fontSizes[size],
             '&:active': {
               backgroundColor: optionBgActive[colorMode],
               color: 'transparent',
             },
-          }),
-          indicatorSeparator: base => ({
-            ...base,
-            backgroundColor: placeholderColor[colorMode],
-          }),
-          dropdownIndicator: base => ({
-            ...base,
-            color: placeholderColor[colorMode],
-            '&:hover': {
-              color: color[colorMode],
-            },
-          }),
-          valueContainer: base => ({
-            ...base,
-            paddingLeft: theme.space[4],
-            paddingRight: theme.space[4],
-          }),
-          multiValue: base => ({
-            ...base,
-            backgroundColor: colorSetPrimaryBg[colorMode],
-          }),
-          singleValue: base => ({
-            ...base,
-            color: color[colorMode],
-            fontSize: theme.fontSizes[size],
           }),
         }}
         id={label}

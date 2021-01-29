@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { 
   Flex,
-  useColorMode,
+  useColorModeValue,
   FormControl, FormLabel, FormErrorMessage
 } from "@chakra-ui/react"
 
-const labelColor = { dark: 'whiteAlpha.700', light: 'blackAlpha.700' };
 
 const FormField = ({
   label,
@@ -14,8 +13,8 @@ const FormField = ({
   children,
   ...props
 }) => {
-  const { colorMode } = useColorMode();
-
+  const labelColor = useColorModeValue('blackAlpha.700', 'whiteAlpha.700');
+  const errorColor = useColorModeValue('red.500', 'red.300');
   return (
     <FormControl
       as={Flex}
@@ -29,7 +28,7 @@ const FormField = ({
       {...props}>
       <FormLabel
         htmlFor={htmlFor}
-        color={labelColor[colorMode]}
+        color={error ? errorColor : labelColor}
         pl={1}
         display="flex"
         alignItems="center"

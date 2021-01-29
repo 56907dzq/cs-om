@@ -12,15 +12,17 @@ function validateTarget(value) {
 }
 
 const QueryTarget = (props) => {
-  const { name, register, onChange, placeholder } = props;
+  const { name, register, onChange, setValue, placeholder } = props;
 
   const bg = useColorModeValue('white', 'whiteAlpha.100');
-  const color = useColorModeValue('gray.400', 'whiteAlpha.800');
-  const border = useColorModeValue('gray.100', 'whiteAlpha.50');
-  const placeholderColor = useColorModeValue('gray.600', 'whiteAlpha.700');
+  const color = useColorModeValue('gray.500', 'whiteAlpha.800');
+  const border = useColorModeValue('gray.300', 'whiteAlpha.50');
+  const placeholderColor = useColorModeValue('gray.400', 'whiteAlpha.600');
+  const _hover = useColorModeValue('gray.400', 'cyan.400');
 
   function handleInputChange(e){
-    onChange({ field: 'target', value: e.target.value });
+    setValue(e.target.value)
+    onChange({ label: 'target', value: e.target.value });
   }
   return (
     <>
@@ -31,10 +33,12 @@ const QueryTarget = (props) => {
         color={color}
         borderColor={border}
         name={name}
+        id={name}
         ref={register({ validate: validateTarget })}
         onChange={handleInputChange}
         aria-label={placeholder}
         placeholder={placeholder}
+        _hover={{ borderColor: _hover }}
         _placeholder={{ color: placeholderColor }}
       />
   </>

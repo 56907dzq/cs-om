@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { forwardRef } from 'react';
-import { Box, useTheme, Button } from '@chakra-ui/react';
+import { useTheme, Button } from '@chakra-ui/react';
 import { FiSearch } from "react-icons/fi"
 
 const btnProps = {

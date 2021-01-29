@@ -1,4 +1,6 @@
-// import { theme as chakraTheme } from '@chakra-ui/react';
+// import { extendTheme } from '@chakra-ui/react';
+// import { mode } from '@chakra-ui/theme-tools';
+
 
 // const defaultBodyFonts = [
 //   '-apple-system',
@@ -11,7 +13,7 @@
 //   '"Segoe UI Emoji"',
 //   '"Segoe UI Symbol"',
 // ];
-
+  
 // const defaultMonoFonts = [
 //   'SFMono-Regular',
 //   'Melno',
@@ -22,67 +24,48 @@
 //   'monospace',
 // ];
 
-
-// const formatFont = font => {
+// function formatFont(font) {
 //   const fontList = font.split(' ');
 //   const fontFmt = fontList.length >= 2 ? `'${fontList.join(' ')}'` : fontList.join(' ');
 //   return fontFmt;
-// };
-
-// const importFonts = userFonts => {
+// }
+  
+// function importFonts(userFonts){
 //   const [body, mono] = [defaultBodyFonts, defaultMonoFonts];
-//   const bodyFmt = formatFont(userFonts.body);
-//   const monoFmt = formatFont(userFonts.mono);
+//   const { body: userBody, mono: userMono, ...fontWeights } = userFonts;
+//   const bodyFmt = formatFont(userBody);
+//   const monoFmt = formatFont(userMono);
 //   if (userFonts.body && !body.includes(bodyFmt)) {
 //     body.unshift(bodyFmt);
 //   }
 //   if (userFonts.mono && !mono.includes(monoFmt)) {
 //     mono.unshift(monoFmt);
 //   }
-//   return {
-//     body: body.join(', '),
-//     heading: body.join(', '),
-//     mono: mono.join(', '),
-//   };
-// };
+//   return [
+//     {
+//       body: body.join(', '),
+//       heading: body.join(', '),
+//       mono: mono.join(', '),
+//     },
+//     fontWeights,
+//   ];
+// }
+  
+//   const defaultTheme = extendTheme({
+//     fonts,
+//     styles: {
+//       global: props => ({
+//         html: { scrollBehavior: 'smooth', height: '-webkit-fill-available' }
+//       }),
+//     },
+//   });
 
-// const importColors = (userColors = {}) => {
-//   return {
-//     transparent: 'transparent',
-//     current: 'currentColor'
-//   };
-// };
-
-// export const makeTheme = userTheme => ({
-//   ...chakraTheme,
-//   colors: importColors(userTheme.colors),
-//   fonts: importFonts(userTheme.fonts),
-// });
-
-
-
-// export const opposingColor = (theme, color) => {
-//   if (color.match(/^\w+\.\d+$/m)) {
-//     const colorParts = color.split('.');
-//     if (colorParts.length !== 2) {
-//       throw Error(`Color is improperly formatted. Got '${color}'`);
-//     }
-//     const [colorName, colorOpacity] = colorParts;
-//     color = theme.colors[colorName][colorOpacity];
-//   }
-//   const opposing = isDark(color) ? theme.colors.white : theme.colors.black;
-//   return opposing;
-// };
-
-// export const googleFontUrl = (fontFamily, weights = [300, 400, 700]) => {
+// export function googleFontUrl(fontFamily: string, weights: number[] = [300, 400, 700]): string {
 //   const urlWeights = weights.join(',');
-//   const fontName = fontFamily
-//     .split(/, /)[0]
-//     .trim()
-//     .replace(/'|"/g, '');
+//   const fontName = fontFamily.split(/, /)[0].trim().replace(/'|"/g, '');
 //   const urlFont = fontName.split(/ /).join('+');
-//   const urlBase = `https://fonts.googleapis.com/css?family=${urlFont}:${urlWeights}&display=swap`;
-//   return urlBase;
-// };
+//   return `https://fonts.googleapis.com/css?family=${urlFont}:${urlWeights}&display=swap`;
+// }
 
 // export { theme as defaultTheme } from '@chakra-ui/react';
+  
