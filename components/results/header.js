@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { AccordionIcon, Box, Spinner, HStack, Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import { BiError } from "react-icons/bi";
 import { FaCheckCircle } from "react-icons/fa";
@@ -16,7 +15,7 @@ export const ResultHeader = (props) => {
         hasArrow
         placement="top"
         isDisabled={loading}
-        label="status"
+        label={isError ? "something went wrong" : "success"}
         bg={isError ? warning : defaultStatus}
         color={isError ? defaultStatus : warning }
       >

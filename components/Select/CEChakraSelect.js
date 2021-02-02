@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Text, useColorMode, useTheme, useToken } from '@chakra-ui/react';
-import Select from 'react-select';
+import { Text, useColorMode, useTheme } from '@chakra-ui/react';
+import AsyncCreatableSelect from 'react-select/async-creatable';
 
-export const ChakraSelect = React.forwardRef(
+export const CEChakraSelect = React.forwardRef(
   ({ size, name:label, children, ...props }, ref) => {
     const theme = useTheme();
     const { colorMode } = useColorMode();
@@ -89,7 +89,7 @@ export const ChakraSelect = React.forwardRef(
       light: theme.colors.blackAlpha[50],
     };
     return (
-      <Select
+      <AsyncCreatableSelect
         ref={ref}
         styles={{
           container: base => ({
@@ -185,7 +185,7 @@ export const ChakraSelect = React.forwardRef(
         }
         {...props}>
         {children}
-      </Select>
+      </AsyncCreatableSelect >
     );
   },
 );

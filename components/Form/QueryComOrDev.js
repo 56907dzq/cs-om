@@ -1,11 +1,12 @@
-import { ChakraSelect } from 'components/ChakraSelect';
+import { ChakraSelect } from '../Select/ChakraSelect';
 import { useCustomSWR } from 'util/requests'
 
 
-const QueryCommamd = props => {
+const QueryComOrDev = props => {
   
   const { onChange, ControlChange, defaultValue, name } = props;
-  const { data, isLoading } = useCustomSWR(`/s_check_${name}/search`)
+
+  const { data, isLoading } = useCustomSWR(`/s_${name}/search`)
   
   function handleChange(e){
     e ? ControlChange(e.id):ControlChange(null)
@@ -28,4 +29,4 @@ const QueryCommamd = props => {
   );
 };
 
-export default QueryCommamd
+export default QueryComOrDev

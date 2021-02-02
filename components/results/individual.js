@@ -1,6 +1,9 @@
 import { forwardRef, useEffect} from 'react';
 import {
   Box,
+  Text,
+  Center,
+  Fade,
   Flex,
   chakra,
   Alert,
@@ -32,7 +35,6 @@ const _Result = ({formData,value}, ref) => {
   const { data:result, error, isValidating:isLoading, mutate } = useQuerySWR(formData)
   let copyValue = result? result.result:"no result";
   let status = result? result.icon: "";
-  
   const scrollbar = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
   const scrollbarHover = useColorModeValue('blackAlpha.400', 'whiteAlpha.400');
   const scrollbarBg = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
@@ -62,9 +64,17 @@ const _Result = ({formData,value}, ref) => {
             <ResultHeader    
               loading={isLoading}
               title={value}
-              isError={false}
+              isError={status!=="success"}
             />
           </AccordionButton>
+          <HStack py={2} spacing={1}>
+            <Fade in={isLoading}>
+              <Text>设备检测中，请稍等...</Text>
+            </Fade>
+            <Fade in={!isLoading && error}>
+              <Text>设备检测失败!</Text>
+            </Fade>
+          </HStack>
           <HStack py={2} spacing={1}>
             <CopyButton copyValue={copyValue} isDisabled={isLoading} />
             <RequeryButton requery={mutate} isDisabled={isLoading} />

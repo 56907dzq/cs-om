@@ -1,4 +1,4 @@
-import { ChakraSelect } from 'components/ChakraSelect';
+import { ChakraSelect } from '../Select/ChakraSelect';
 import { useCustomSWR } from 'util/requests'
 
 

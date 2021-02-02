@@ -27,12 +27,12 @@ export function useCustomSWR (url){
 
 export function useQuerySWR(query){
   const { 
-    command = "", 
     mgm = "", 
     pe = "", 
-    ce = "",
-    ce_account = "",
-    target = "" 
+    ce_host_ip = "",
+    target = "",
+    device_account = "",
+    check_command = ""
   } = query
   const controller = new AbortController();
 
@@ -77,7 +77,7 @@ export function useQuerySWR(query){
     [],
   );
 
-  return useSWR([mgm,command,target,pe,ce,ce_account],
+  return useSWR([mgm,check_command,target,pe,ce_host_ip,device_account],
     runQuery,
     {revalidateOnFocus: false, errorRetryCount:1, dedupingInterval:0}
     )

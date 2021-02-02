@@ -72,9 +72,9 @@ const EditableCell = ({
   }, [initialValue])
 
   return <>
-          <Editable px={3} py={1}  value={value}  >
+          <Editable px={3} py={1}  value={value} onSubmit={onBlur} >
             <EditablePreview minW="5rem" minH="26px" />
-            <EditableInput onChange={onChange} w="10rem" onSubmit={onBlur}  />
+            <EditableInput onChange={onChange} w="10rem" />
           </Editable>
           {/* <Input
             variant="filled" 
@@ -102,6 +102,7 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
     setSkipPageReset(true);
+    // console.log(rowIndex, columnId, value)
     mutate(`/${url}/search`, () =>
       data.map((row, index) => {
         if (index === rowIndex) {
@@ -115,12 +116,13 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
       , false);
   }
   //自定义更新按钮
-  const UpdateButton = ({original}) => {
+  const UpdateButton = ({values}) => {
+
     const update = async () => {
       let upData = new FormData();
-      Object.keys(original).forEach( key => upData.append(key,original[key]))
+      Object.keys(values).forEach( key => upData.append(key,values[key]))
       await remoteUpdate(url, upData)
-      //重新获取
+      // //重新获取
       mutate(`/${url}/search`)
     }
 
@@ -146,11 +148,14 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
     preGlobalFilteredRows,
     setGlobalFilter,
     selectedFlatRows,
-    state: { pageIndex, selectedRowIds, globalFilter},
+    state: { pageIndex, selectedRowIds, globalFilter },
   } = useTable(
     {
       columns,
       data,
+      initialState:{
+        hiddenColumns:['id']
+      },
       defaultColumn,
       autoResetPage: !skipPageReset,
       updateMyData

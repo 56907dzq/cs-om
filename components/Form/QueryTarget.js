@@ -2,12 +2,14 @@ import * as React from 'react';
 import { Input, useColorModeValue } from '@chakra-ui/react';
 
 const IP_Pattern = /^((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))$/
-
+const fqdnPattern = new RegExp(
+  /^(?!:\/\/)([a-zA-Z0-9-]+\.)?[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z-]{2,6}?$/im,
+);
 function validateTarget(value) {
   if (!value) {
     return "Target is required";
-  } else if (!IP_Pattern.test(value)) {
-    return "Jeez! this isn't an ip 😱";
+  } else if (!(IP_Pattern.test(value)||fqdnPattern.test(value))) {
+    return "Jeez! this isn't an Address 😱";
   } else return true;
 }
 

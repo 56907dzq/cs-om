@@ -27,9 +27,13 @@ export async function getServerSideProps() {
 
 
 export default function Pe({ originData }) {
-  const data =  remoteGet(`/${url}/search`, useMemo(() => originData, []))
+  const data = remoteGet(`/${url}/search`, useMemo(() => originData, []))
   const columns = useMemo(
-    () =>[
+    () =>[{
+            id:'id',
+            Header: 'id',
+            accessor: 'id',
+          },
           {
             Header: '服务器名称',
             accessor: 'server_name',

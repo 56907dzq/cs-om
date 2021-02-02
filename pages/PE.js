@@ -6,7 +6,7 @@ import { AnimatedDiv } from 'components/animated.tsx';
 import { Flex } from "@chakra-ui/react"
 import { useForm, Controller } from "react-hook-form";
 import QueryServer from 'components/Form/QueryServer'
-import QueryCommand from 'components/Form/QueryCommand'
+import QueryComOrDev from 'components/Form/QueryComOrDev'
 import QueryTarget from 'components/Form/QueryTarget'
 import FormRow from 'components/Form/FormRow';
 import FormField from 'components/Form/FormField';
@@ -31,7 +31,7 @@ export default function PE() {
     defaultValues: {
       'mgm':'',
       'pe':'',
-      'command':'',
+      'check_command':'',
       'target': ''
     }
   });
@@ -41,7 +41,7 @@ export default function PE() {
       ? setMgmValue(e)
       : e.label === 'pe'
       ? setPeValue(e)
-      : e.label === 'command'
+      : e.label === 'check_command'
       ? setCommandValue(e)
       : e.label === 'target'
       ? setTargetValue(e)
@@ -69,7 +69,6 @@ export default function PE() {
             peValue={peValue}
             commandValue={commandValue}
             targetValue={targetValue}
-            setSubmitting={setSubmitting}
           />
         </>
       )}
@@ -136,17 +135,17 @@ export default function PE() {
             </FormField>
             <FormField
               label="操作命令"
-              htmlFor="command"
-              error={errors.command}
+              htmlFor="check_command"
+              error={errors.check_command}
               >
               <Controller
-                name="command"     
+                name="check_command"     
                 control={control}
                 rules={{required: {value:true, message:'command is required'}}}
                 render={(
                   { name, onChange, defaultValue }
                 ) => (
-                  <QueryCommand
+                  <QueryComOrDev
                     name={name}
                     ControlChange={onChange}
                     defaultValue={defaultValue}

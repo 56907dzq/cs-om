@@ -1,14 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Accordion } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
 import { AnimatedDiv } from 'components/animated.tsx';
 import { Tags } from './tags';
-
 import { Result } from './individual';
 
+function computedValue(a,b){
+  if(a){
+    return a.value
+  }else if(b){
+    return b.value
+  }else{
+    return ""
+  }
+}
 export const Results = (props) => {
-  const {setSubmitting, formData, peValue, ...rest } = props;
+  const {formData, peValue, ceValue, ...rest } = props;
   // Scroll to the top of the page when results load - primarily for mobile.
+
+  const value = useMemo(() => computedValue(peValue, ceValue), [peValue, ceValue]);
+  
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.scrollTo(0, 0);
@@ -32,9 +43,9 @@ export const Results = (props) => {
         animate={{ opacity: 1, y: 0 }}
         maxW={{ base: '100%', md: '83%' }}
       >
-        <Accordion allowMultiple allowToggle defaultIndex={0}>
+        <Accordion allowToggle defaultIndex={0}>
           <AnimatePresence key="group">
-            <Result index={0} isExpanded value={peValue? peValue.value:""} formData={formData} />
+            <Result index={0} isExpanded value={value} formData={formData} />
           </AnimatePresence>
         </Accordion>
       </AnimatedDiv>
