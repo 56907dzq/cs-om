@@ -20,6 +20,7 @@ const QueryTarget = props => {
       defaultValue={defaultValue}
       aria-label={name}
       name={name}
+      inputId={name}
       onChange={ControlChange}
     />
   );

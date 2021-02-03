@@ -44,6 +44,7 @@ const QueryCE = props  => {
     <CEChakraSelect
       size="lg"
       name={name}
+      inputId={name}
       aria-label={name}
       defaultValue={value}
       value={value}

@@ -208,6 +208,20 @@ export default function CE({ce_data}) {
                <Controller
                 name="target"     
                 control={control}
+                rules={{
+                  validate: {
+                    maxLength: value => {
+                      if(value){
+                        if(value.length<=3){
+                          return true
+                        }else{
+                          return "max support 3"
+                        }
+                      }
+                      return true
+                    }
+                  }
+                }}
                 render={(
                   { name, onChange, defaultValue }
                 ) => (

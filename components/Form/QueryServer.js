@@ -23,6 +23,7 @@ const QueryServer = props  => {
       getOptionValue={option => option['id']}
       aria-label={name}
       name={name}
+      inputId={name}
       onChange={handleChange}
     />
   );
