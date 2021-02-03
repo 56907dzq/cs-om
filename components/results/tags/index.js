@@ -1,11 +1,22 @@
 import { Box, Stack, useToken, useBreakpointValue } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import React, { useMemo } from 'react';
 import { Label } from './label';
 
 const transition = { duration: 0.3, delay: 0.5 };
 
+function computedValue(a,b){
+  if(a){
+    return a.value
+  }else if(b!={}){
+    return b.value
+  }else{
+    return ""
+  }
+}
 export const Tags = (props) => {
-  const { mgmValue, commandValue, targetValue } =props
+  const { peValue, ceValue, mgmValue, commandValue } =props
+  const value = useMemo(() => computedValue(peValue, ceValue), [peValue, ceValue]);
   const mgmBg = useToken('colors', 'cyan.600');
   const commandBg = useToken('colors', 'green.600');
   const targetBg = useToken('colors', 'purple.600');
@@ -88,14 +99,15 @@ export const Tags = (props) => {
             />
           </motion.div>
           <motion.div
-            key="target"
+            key="device"
             initial={initialRight}
             animate={animateRight}
             exit={{ opacity: 0, x: '100%' }}
             transition={transition}
           >
             <Label
-              {...targetValue}
+              label="device"
+              value={value?value:"no device"}
               bg={targetBg}
               fontSize={{ base: 'xs', md: 'sm' }}
             />

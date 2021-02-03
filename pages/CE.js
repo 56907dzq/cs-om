@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Layout from 'layouts/layout';
-import { useState,useEffect,useMemo } from 'react';
+import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { AnimatedDiv } from 'components/animated.tsx';
 import { Flex } from "@chakra-ui/react";
@@ -25,7 +25,7 @@ export async function getStaticProps() {
     props: {
       ce_data,
     },
-    revalidate: 180, 
+    revalidate: 3600, 
   }
 }
 
@@ -35,12 +35,11 @@ export default function CE({ce_data}) {
   const [ceValue, setCeValue] = useState({});
   const [commandValue, setCommandValue] = useState({});
   const [ceAccountValue, setceAccountValue] = useState({});
-  const [targetValue, setTargetValue] = useState({});
   
   const [formData, setFormData] = useState({});
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const { register, handleSubmit, errors, control, setValue, formState } = useForm({
+  const { handleSubmit, errors, control, formState } = useForm({
     reValidateMode: "onChange",
     shouldFocusError: true,
     defaultValues: {
@@ -61,17 +60,12 @@ export default function CE({ce_data}) {
       ? setceAccountValue(e)
       : e.label === 'check_command'
       ? setCommandValue(e)
-      : e.label === 'target'
-      ? setTargetValue(e)
       : null;
   };
   const onSubmit = data => {
-    console.log(data)
     setFormData(data)
     setSubmitting(true)
   }
-  useEffect(() => {
-  }, [isSubmitting]);
   return (
     <Layout>
       <Head>
@@ -86,7 +80,6 @@ export default function CE({ce_data}) {
             mgmValue={mgmValue}
             ceValue={ceValue}
             commandValue={commandValue}
-            targetValue={targetValue}
           />
         </>
       )}
@@ -139,10 +132,10 @@ export default function CE({ce_data}) {
                 name="ce_host_ip"     
                 control={control}
                 rules={{
-                    required: {
-                      value: true, 
-                      message: 'Ce is required'
-                    }, 
+                    // required: {
+                    //   value: true, 
+                    //   message: 'Ce is required'
+                    // }, 
                     pattern: {
                       value: /^((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))$/,
                       message: 'this is not an ip address'
@@ -212,12 +205,18 @@ export default function CE({ce_data}) {
               htmlFor="target"
               error={errors.target}
               >
-              <QueryTarget
-                name="target"
-                setValue={setValue}
-                register={register}
-                onChange={handleChange}
-                placeholder="Target"
+               <Controller
+                name="target"     
+                control={control}
+                render={(
+                  { name, onChange, defaultValue }
+                ) => (
+                  <QueryTarget
+                    name={name}
+                    defaultValue={defaultValue}
+                    ControlChange={onChange}
+                  />
+                )}
               />
             </FormField>
           </FormRow>

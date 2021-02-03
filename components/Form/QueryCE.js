@@ -1,4 +1,4 @@
-import { CEChakraSelect } from '../Select/CEChakraSelect';
+import {CEChakraSelect} from '../Select';
 import { useState, useMemo } from 'react';
 
 

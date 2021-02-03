@@ -72,7 +72,7 @@ const EditableCell = ({
   }, [initialValue])
 
   return <>
-          <Editable px={3} py={1}  value={value} onSubmit={onBlur} >
+          <Editable px={3} py={1}  value={typeof(value) === 'undefined'?"###":value} onSubmit={onBlur} >
             <EditablePreview minW="5rem" minH="26px" />
             <EditableInput onChange={onChange} w="10rem" />
           </Editable>
@@ -97,11 +97,11 @@ const defaultColumn = {
 
 const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
   // UI rebuild
-  const [skipPageReset, setSkipPageReset] = React.useState(false)
+  // const [skipPageReset, setSkipPageReset] = React.useState(false)
   //自定义更新方法
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
-    setSkipPageReset(true);
+    // setSkipPageReset(true);
     // console.log(rowIndex, columnId, value)
     mutate(`/${url}/search`, () =>
       data.map((row, index) => {
@@ -117,10 +117,12 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
   }
   //自定义更新按钮
   const UpdateButton = ({values}) => {
-
     const update = async () => {
       let upData = new FormData();
-      Object.keys(values).forEach( key => upData.append(key,values[key]))
+      Object.keys(values).forEach( key => {
+        if(typeof(values[key]) !== 'undefined')
+          upData.append(key,values[key])
+      })
       await remoteUpdate(url, upData)
       // //重新获取
       mutate(`/${url}/search`)
@@ -157,7 +159,7 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
         hiddenColumns:['id']
       },
       defaultColumn,
-      autoResetPage: !skipPageReset,
+      autoResetPage: false,
       updateMyData
     },
     useGlobalFilter,
@@ -202,9 +204,9 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
     }
   )
 
-  React.useEffect(() => {
-    setSkipPageReset(false)
-  }, [data])
+  // React.useEffect(() => {
+  //   setSkipPageReset(false)
+  // }, [data])
 
   const { colorMode } = useColorMode();
   const thBg = useColorModeValue("whiteAlpha.50", "blackAlpha.50")
@@ -216,7 +218,6 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
   
   //选择的行数
   let numSelected = Object.keys(selectedRowIds).length
-  
   //添加 
   const addHandler = async (postdata) => {
     //本地立即添加

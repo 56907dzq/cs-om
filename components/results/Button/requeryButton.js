@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { Button, Icon, Tooltip } from '@chakra-ui/react';
 import { FiRepeat } from "react-icons/fi";
 

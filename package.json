@@ -20,8 +20,7 @@
     "react-select": "^3.2.0",
     "react-table": "^7.6.2",
     "string-format": "^2.0.0",
-    "swr": "^0.4.0",
-    "yup": "^0.32.8"
+    "swr": "^0.4.0"
   },
   "devDependencies": {
     "namor": "^2.0.2"

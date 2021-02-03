@@ -30,15 +30,16 @@ export function useQuerySWR(query){
     mgm = "", 
     pe = "", 
     ce_host_ip = "",
-    target = "",
+    host_ip = "",
     device_account = "",
     check_command = ""
   } = query
+
   const controller = new AbortController();
 
   async function runQuery(...params) {
 
-    // console.log('mgm__id', params)
+    // console.log('mgm_id', params[0])
     let upData = new FormData();
     upData.append('mgm_id',params[0])
     upData.append('check_command_id',params[1])
@@ -77,7 +78,7 @@ export function useQuerySWR(query){
     [],
   );
 
-  return useSWR([mgm,check_command,target,pe,ce_host_ip,device_account],
+  return useSWR([mgm,check_command,host_ip,pe,ce_host_ip,device_account],
     runQuery,
     {revalidateOnFocus: false, errorRetryCount:1, dedupingInterval:0}
     )

@@ -1,5 +1,6 @@
 import { Button, Icon, Tooltip, useClipboard } from '@chakra-ui/react';
 import { FiCopy, FiCheck } from "react-icons/fi"
+import * as React from 'react';
 
 export const CopyButton = (props) => {
   const { copyValue, ...rest } = props;

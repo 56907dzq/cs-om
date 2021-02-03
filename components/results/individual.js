@@ -2,7 +2,6 @@ import { forwardRef, useEffect} from 'react';
 import {
   Box,
   Text,
-  Center,
   Fade,
   Flex,
   chakra,
@@ -31,8 +30,8 @@ const AccordionHeaderWrapper = chakra('div', {
   },
 });
 
-const _Result = ({formData,value}, ref) => {
-  const { data:result, error, isValidating:isLoading, mutate } = useQuerySWR(formData)
+const _Result = ({host_ip, params,index}, ref) => {
+  const { data:result, error, isValidating:isLoading, mutate } = useQuerySWR({...params,host_ip})
   let copyValue = result? result.result:"no result";
   let status = result? result.icon: "";
   const scrollbar = useColorModeValue('blackAlpha.300', 'whiteAlpha.300');
@@ -47,7 +46,7 @@ const _Result = ({formData,value}, ref) => {
 
   return (
     <AnimatedAccordionItem
-      id={value}
+      id={index}
       ref={ref}
       isDisabled={isLoading}
       exit={{ opacity: 0, y: 300 }}
@@ -63,7 +62,7 @@ const _Result = ({formData,value}, ref) => {
           <AccordionButton py={2} w="unset" _hover={{}} _focus={{}} flex="1 0 auto">
             <ResultHeader    
               loading={isLoading}
-              title={value}
+              title={host_ip}
               isError={status!=="success"}
             />
           </AccordionButton>

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Layout from 'layouts/layout'
-import { useState,useEffect } from 'react';
+import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { AnimatedDiv } from 'components/animated.tsx';
 import { Flex } from "@chakra-ui/react"
@@ -20,12 +20,11 @@ export default function PE() {
   const [mgmValue, setMgmValue] = useState({});
   const [peValue, setPeValue] = useState({});
   const [commandValue, setCommandValue] = useState({});
-  const [targetValue, setTargetValue] = useState({});
   
   const [formData, setFormData] = useState({});
   const [isSubmitting, setSubmitting] = useState(false);
 
-  const { register, handleSubmit, errors, control, setValue, formState } = useForm({
+  const { handleSubmit, errors, control, formState } = useForm({
     reValidateMode: "onChange",
     shouldFocusError: true,
     defaultValues: {
@@ -43,17 +42,14 @@ export default function PE() {
       ? setPeValue(e)
       : e.label === 'check_command'
       ? setCommandValue(e)
-      : e.label === 'target'
-      ? setTargetValue(e)
       : null;
   };
   const onSubmit = data => {
-    // console.log(data,mgmValue,peValue,commandValue,targetValue);
+    // console.log(data);
     setFormData(data)
     setSubmitting(true)
   }
-  useEffect(() => {
-  }, [isSubmitting]);
+
   return (
     <Layout>
       <Head>
@@ -68,7 +64,6 @@ export default function PE() {
             mgmValue={mgmValue}
             peValue={peValue}
             commandValue={commandValue}
-            targetValue={targetValue}
           />
         </>
       )}
@@ -161,12 +156,18 @@ export default function PE() {
               htmlFor="target"
               error={errors.target}
               >
-              <QueryTarget
-                name="target"
-                setValue={setValue}
-                register={register}
-                onChange={handleChange}
-                placeholder="Target"
+               <Controller
+                name="target"     
+                control={control}
+                render={(
+                  { name, onChange, defaultValue }
+                ) => (
+                  <QueryTarget
+                    name={name}
+                    defaultValue={defaultValue}
+                    ControlChange={onChange}
+                  />
+                )}
               />
             </FormField>
           </FormRow>

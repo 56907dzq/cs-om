@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { Flex, useColorModeValue } from '@chakra-ui/react';
 
 const _Label = (props, ref) => {
