@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { TargetChakraSelect } from '../Select';
 
 const data = [

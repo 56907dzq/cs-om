@@ -273,7 +273,7 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
         variant="striped"
         colorScheme="teal"
       >
-        <TableCaption fontSize="md" px={0} pb={[2,4]} mt={[0,'1rem']} placement="top" >
+        <TableCaption fontSize="md" id="top-cap" px={0} pb={[2,4]} mt={[0,'1rem']} placement="top" >
           <Box py={[0,2]}>
             {tableHeading}
           </Box>
@@ -352,7 +352,7 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
             )
           })}
         </Tbody>
-        <TableCaption fontSize="md" p={2} mt={[0,'1rem']}>
+        <TableCaption id="bot-cap" fontSize="md" p={2} mt={[0,'1rem']}>
           <HStack>
             <HStack spacing="14px">
               <Tooltip label="First">

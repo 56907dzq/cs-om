@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {CEChakraSelect} from '../Select';
 import { useState, useMemo } from 'react';
 

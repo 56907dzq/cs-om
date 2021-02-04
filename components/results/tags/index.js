@@ -1,6 +1,6 @@
 import { Box, Stack, useToken, useBreakpointValue } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Label } from './label';
 
 const transition = { duration: 0.3, delay: 0.5 };
@@ -16,7 +16,7 @@ function computedValue(a,b){
 }
 export const Tags = (props) => {
   const { peValue, ceValue, mgmValue, commandValue } =props
-  const value = useMemo(() => computedValue(peValue, ceValue), [peValue, ceValue]);
+  const value = computedValue(peValue, ceValue)
   const mgmBg = useToken('colors', 'cyan.600');
   const commandBg = useToken('colors', 'green.600');
   const targetBg = useToken('colors', 'purple.600');
