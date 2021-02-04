@@ -17,7 +17,7 @@ import {
   useColorMode,
   useColorModeValue,
   Editable, EditableInput, EditablePreview,
-  Table, TableCaption, Thead, Tbody, Tr, Th, Td
+  Table, TableCaption, Thead, Tbody,Tfoot, Tr, Th, Td
 } from "@chakra-ui/react"
 
 import { 
@@ -204,11 +204,9 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
     }
   )
 
-  // React.useEffect(() => {
-  //   setSkipPageReset(false)
-  // }, [data])
-
   const { colorMode } = useColorMode();
+  const ref = React.createRef();
+  const [tableWidth,setTableWidth]=React.useState('100%')
   const thBg = useColorModeValue("whiteAlpha.50", "blackAlpha.50")
   const thBg_hover = { dark: 'whiteAlpha.50', light: 'blackAlpha.50' };
   const capBg = { dark: "red.800", light: "rgb(255, 226, 236)"};
@@ -249,7 +247,9 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
     //重新获取
     mutate(`/${url}/search`)
   }
-
+  React.useEffect(() => {
+    setTableWidth(ref.current.clientWidth)
+  }, [data,page])
   // Render the UI for your table
   return (
     <>
@@ -269,7 +269,7 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
           )}
         </code>
       </pre> */}
-      <Table size='md' {...getTableProps()}
+      <Table ref={ref} size='md' {...getTableProps()}
         variant="striped"
         colorScheme="teal"
       >
@@ -352,74 +352,72 @@ const EnhancedTable = ({ url, data, columns, tableHeading, dialog }) => {
             )
           })}
         </Tbody>
-        <TableCaption id="bot-cap" fontSize="md" p={2} mt={[0,'1rem']}>
-          <HStack>
-            <HStack spacing="14px">
-              <Tooltip label="First">
-                <IconButton
-                  fontSize="20px" 
-                  icon={<MdFirstPage />}
-                  onClick={() => gotoPage(0)}
-                  disabled={!canPreviousPage}
-                  aria-label="first page"
-                />
-              </Tooltip>
-              <Tooltip label="Prev">
-                <IconButton
-                  fontSize="20px" 
-                  icon={<MdChevronLeft />}
-                  onClick={() => previousPage()} 
-                  disabled={!canPreviousPage}
-                  aria-label="previous page"
-                />
-              </Tooltip>
-              <Tooltip label="Next">
-                <IconButton
-                  fontSize="20px" 
-                  icon={<MdChevronRight />}
-                  onClick={() => nextPage()} 
-                  disabled={!canNextPage}
-                  aria-label="next page"
-                />
-              </Tooltip>
-              <Tooltip label="Last">
-                <IconButton
-                  fontSize="20px" 
-                  icon={<MdLastPage />}
-                  onClick={() => gotoPage(pageCount - 1)} 
-                  disabled={!canNextPage}
-                  aria-label="last page"
-                />
-              </Tooltip>
-            </HStack>
-            <Spacer />
-            <HStack>
-              <Box>
-                page
-              </Box>
-              <Box as="strong">
-                {pageIndex + 1} of {pageOptions.length}
-              </Box>
-            </HStack>
-            <Spacer />
-            <HStack>
-              <Box>
-                Go to page:
-              </Box>
-              <Input
-                type="number"
-                bgColor={thBg}
-                defaultValue={pageIndex + 1}
-                onChange={e => {
-                  const page = e.target.value ? Number(e.target.value) - 1 : 0
-                  gotoPage(page)
-                }}
-                style={{ width: '60px', marginLeft:'12px' }}
-              /> 
-            </HStack>
-          </HStack>
-        </TableCaption>
       </Table>
+      <HStack w={tableWidth} id="bot-cap" fontSize="md" p={2} my={['0.5rem','1rem']}>
+        <HStack spacing="14px">
+          <Tooltip label="First">
+            <IconButton
+              fontSize="20px" 
+              icon={<MdFirstPage />}
+              onClick={() => gotoPage(0)}
+              disabled={!canPreviousPage}
+              aria-label="first page"
+            />
+          </Tooltip>
+          <Tooltip label="Prev">
+            <IconButton
+              fontSize="20px" 
+              icon={<MdChevronLeft />}
+              onClick={() => previousPage()} 
+              disabled={!canPreviousPage}
+              aria-label="previous page"
+            />
+          </Tooltip>
+          <Tooltip label="Next">
+            <IconButton
+              fontSize="20px" 
+              icon={<MdChevronRight />}
+              onClick={() => nextPage()} 
+              disabled={!canNextPage}
+              aria-label="next page"
+            />
+          </Tooltip>
+          <Tooltip label="Last">
+            <IconButton
+              fontSize="20px" 
+              icon={<MdLastPage />}
+              onClick={() => gotoPage(pageCount - 1)} 
+              disabled={!canNextPage}
+              aria-label="last page"
+            />
+          </Tooltip>
+        </HStack>
+        <Spacer />
+        <HStack>
+          <Box>
+            page
+          </Box>
+          <Box as="strong">
+            {pageIndex + 1} of {pageOptions.length}
+          </Box>
+        </HStack>
+        <Spacer />
+        <HStack>
+          <Box>
+            Go to page:
+          </Box>
+          <Input
+            type="number"
+            bgColor={thBg}
+            defaultValue={pageIndex + 1}
+            onChange={e => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              gotoPage(page)
+            }}
+            style={{ width: '60px', marginLeft:'12px' }}
+          /> 
+        </HStack>
+      </HStack>
         {/* <select
           value={pageSize}
           onChange={e => {
