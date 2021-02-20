@@ -20,8 +20,8 @@ export const Results = (props) => {
       <AnimatedDiv
         p={0}
         my={5}
+        mx={0}
         w="100%"
-        mx="auto"
         rounded="lg"
         textAlign="left"
         borderWidth="1px"
@@ -30,7 +30,6 @@ export const Results = (props) => {
         exit={{ opacity: 0, y: 300 }}
         transition={{ duration: 0.3 }}
         animate={{ opacity: 1, y: 0 }}
-        maxW={{ base: '100%', md: '83%' }}
       >
         <Accordion allowMultiple allowToggle defaultIndex={[0]}>
           <AnimatePresence key="group">

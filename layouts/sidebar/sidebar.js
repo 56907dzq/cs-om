@@ -137,7 +137,7 @@ const Sidebar = () => {
         overscrollBehavior: "contain",
       }}
       top="6.5rem"
-      w="280px"
+      w="245px"
       h="calc(((100vh - 1.5rem) - 64px) - 42px);"
       p="8"
       maxH="480px"

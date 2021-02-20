@@ -68,7 +68,6 @@ export const Tags = (props) => {
       w="100%"
       mx="auto"
       textAlign="left"
-      maxW={{ base: '100%', lg: '75%', xl: '70%' }}
     >
       <Stack isInline align="center" justify="center" flexWrap="wrap">
         <AnimatePresence key="tags">

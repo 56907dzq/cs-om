@@ -5,28 +5,49 @@ import ServerTable from 'components/Table/baseTable'
 import { remoteGet } from 'util/requests'
 
 
-const url = 's_log'
+// const url = 's_log'
 
-export async function getServerSideProps(context) {
+// export async function getServerSideProps(context) {
 
-  const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/${url}/search`)
-  const originData = await res.json()
+//   const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/${url}/search`)
+//   const originData = await res.json()
 
-  if (!originData) {
-    return {
-      notFound: true,
-    }
-  }
+//   if (!originData) {
+//     return {
+//       notFound: true,
+//     }
+//   }
   
-  return {
-    props: {
-      originData
-    }
+//   return {
+//     props: {
+//       originData
+//     }
+//   }
+// }
+function notifyMe() {
+  // 先检查浏览器是否支持
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+
+  // 检查用户是否同意接受通知
+  else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+    var notification = new Notification("Hi there!");
+  }
+
+  // 否则我们需要向用户获取权限
+  else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(function (permission) {
+      // 如果用户接受权限，我们就可以发起一条消息
+      if (permission === "granted") {
+         var notification = new Notification("Hi there!");
+      }
+    });
   }
 }
-
-export default function Log({ originData }) {
-  const [data, setData] = useState(originData)
+export default function Log() {
+  // const [data, setData] = useState(originData)
   // const [loading, setLoading] = useState(false)
   // const [pageCount, setPageCount] = useState(0)
   // const fetchIdRef = React.useRef(0)
@@ -44,7 +65,7 @@ export default function Log({ originData }) {
       <Head>
         <title>Log</title>
       </Head>
-      <p>log</p>
+      <button onClick={notifyMe}>Notify me!</button>
       {/* <ServerTable
         columns={columns}
         data={data}

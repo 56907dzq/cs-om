@@ -9,7 +9,7 @@ const selectionColor = { dark: 'black', light: 'white' };
 
 export const TextOutput = ({ children, ...props }) => {
   const { colorMode } = useColorMode();
-
+  const { children, ...rest } = props;
   return (
     <Box
       fontFamily="mono"
@@ -30,12 +30,9 @@ export const TextOutput = ({ children, ...props }) => {
           color: selectionColor[colorMode],
         },
       })}
-      {...props}>
-      {/* {children
-        .split('\\n')
-        .join('\n')
-        .replace(/\n\n/g, '\n')} */}
-        aaa
+      {...rest}>
+        {children.split('\\n').join('\n').replace(/\n\n/g, '\n')}
     </Box>
   );
 };
+

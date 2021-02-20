@@ -6,7 +6,7 @@ import { AnimatedDiv } from 'components/animated.tsx';
 import { Flex } from "@chakra-ui/react"
 import { useForm, Controller } from "react-hook-form";
 import QueryServer from 'components/Form/QueryServer'
-import QueryComOrDev from 'components/Form/QueryComOrDev'
+import QueryCommand from 'components/Form/QueryCommand';
 import QueryTarget from 'components/Form/QueryTarget'
 import FormRow from 'components/Form/FormRow';
 import FormField from 'components/Form/FormField';
@@ -140,8 +140,10 @@ export default function PE() {
                 render={(
                   { name, onChange, defaultValue }
                 ) => (
-                  <QueryComOrDev
+                  <QueryCommand
                     name={name}
+                    type="PE"
+                    query={{name:''}}
                     ControlChange={onChange}
                     defaultValue={defaultValue}
                     onChange={handleChange}

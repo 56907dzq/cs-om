@@ -42,7 +42,7 @@ const _Result = ({host_ip, params,index}, ref) => {
       if(!isLoading){
         console.log(result)
       }
-  }, [isLoading]);
+  }, [useQuerySWR]);
 
   return (
     <AnimatedAccordionItem

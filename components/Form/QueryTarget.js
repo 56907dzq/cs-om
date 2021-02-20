@@ -2,9 +2,10 @@ import * as React from 'react';
 import { TargetChakraSelect } from '../Select';
 
 const data = [
-  { value: '202.96.209.5', label: '202.96.209.5'},
-  { value: '8.8.8.8', label: '8.8.8.8'},
-  { value: 'www.baidu.com', label: 'www.baidu.com'}
+  { value: 'access.fashion-tele.com', label: 'access.fashion-tele.com'},
+  { value: 'accesszp.fashion-tele.com', label: 'accesszp.fashion-tele.com'},
+  { value: '222.73.198.139', label: '222.73.198.139'},
+  { value: '61.151.249.2', label: '61.151.249.2'}
 ];
 
 const QueryTarget = props => {

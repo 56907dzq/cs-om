@@ -1,13 +1,14 @@
 import Head from 'next/head';
 import Layout from 'layouts/layout';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { AnimatedDiv } from 'components/animated.tsx';
 import { Flex } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
 import QueryServer from 'components/Form/QueryServer';
 import QueryCE from 'components/Form/QueryCE';
-import QueryComOrDev from 'components/Form/QueryComOrDev';
+import QueryAccount from 'components/Form/QueryAccount';
+import QueryCommand from 'components/Form/QueryCommand';
 import QueryTarget from 'components/Form/QueryTarget'
 import FormRow from 'components/Form/FormRow';
 import FormField from 'components/Form/FormField';
@@ -32,7 +33,7 @@ export async function getStaticProps() {
 export default function CE({ce_data}) {
 
   const [mgmValue, setMgmValue] = useState({});
-  const [ceValue, setCeValue] = useState({});
+  const [ceValue, setCeValue] = useState({name: ""});
   const [commandValue, setCommandValue] = useState({});
   const [ceAccountValue, setceAccountValue] = useState({});
   
@@ -64,7 +65,9 @@ export default function CE({ce_data}) {
   };
   const onSubmit = data => {
     setFormData(data)
-    setSubmitting(true)
+    console.log(data)
+    // console.log(ceValue)
+    // setSubmitting(true)
   }
   return (
     <Layout>
@@ -108,6 +111,7 @@ export default function CE({ce_data}) {
               <Controller
                 name="mgm"     
                 control={control}
+                defaultValue=""
                 rules={{required: {value:true, message:'Mgm is required'}}}
                 render={(
                   { name, onChange, defaultValue }
@@ -131,6 +135,7 @@ export default function CE({ce_data}) {
               <Controller
                 name="ce_host_ip"     
                 control={control}
+                defaultValue=""
                 rules={{
                     // required: {
                     //   value: true, 
@@ -164,14 +169,16 @@ export default function CE({ce_data}) {
               <Controller
                 name="device_account"     
                 control={control}
+                defaultValue=""
                 rules={{required: {value:true, message:'Ce account is required'}}}
                 render={(
-                  { name, onChange, defaultValue }
+                  { name, onChange, defaultValue },
                 ) => (
-                  <QueryComOrDev
+                  <QueryAccount
                     name={name}
                     defaultValue={defaultValue}
                     ControlChange={onChange}
+                    query={ceValue}
                     onChange={handleChange}
                   />
                 )}
@@ -185,12 +192,15 @@ export default function CE({ce_data}) {
               <Controller
                 name="check_command"     
                 control={control}
+                defaultValue=""
                 rules={{required: {value:true, message:'command is required'}}}
                 render={(
                   { name, onChange, defaultValue }
                 ) => (
-                  <QueryComOrDev
+                  <QueryCommand
                     name={name}
+                    type="CE"
+                    query={ceValue}
                     defaultValue={defaultValue}
                     ControlChange={onChange}
                     onChange={handleChange}
@@ -208,6 +218,7 @@ export default function CE({ce_data}) {
                <Controller
                 name="target"     
                 control={control}
+                defaultValue=""
                 rules={{
                   validate: {
                     maxLength: value => {

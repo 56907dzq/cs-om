@@ -33,7 +33,7 @@ export default function Layout({ children }) {
               id="content"
               px={2}
               w='100%' 
-              maxW="56rem"
+              maxW="60rem"
               minH="76vh"
             >
               <PageTransition>

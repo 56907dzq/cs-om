@@ -31,7 +31,7 @@ const QueryCE = props  => {
   function handleChange(e){
     setValue(e)
     e ? ControlChange(e.ce_host_ip):ControlChange(null)
-    e ? onChange({label: name,value:e.ce_host_ip}):onChange({label: name,value: null});
+    e ? onChange({label: name, name: e.visible_name.split('-')[0], value: e.ce_host_ip}):onChange({label: name, name: "", value: null});
   }
   const handleCreate = (inputValue) => {
     setTimeout(() => {
