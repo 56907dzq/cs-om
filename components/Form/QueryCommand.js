@@ -10,6 +10,7 @@ const Option = props => {
   return (
     <Tooltip 
      label={`检测命令:${command}`}
+     openDelay={300}
      placement="left" 
      aria-label="A tooltip" 
      shouldWrapChildren={true}>

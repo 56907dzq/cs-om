@@ -9,6 +9,7 @@ const Option = props => {
   return (
     <Tooltip 
       label={`设备型号:${device_model} 登录类型:${login_type} 登录端口:${login_port}`} 
+      openDelay={300}
       placement="right" 
       aria-label="A tooltip" 
       shouldWrapChildren={true}>
