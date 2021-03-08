@@ -16,8 +16,9 @@ export default class Document extends NextDocument {
   render() {
     return (
       <Html>
-        <Head />
-        
+        <Head>
+        <meta name="renderer" content="webkit" />
+        </Head>
         <body>
           {/* 👇 Here's the script */}
           <ColorModeScript initialColorMode="light" />
