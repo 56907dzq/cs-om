@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash'
 import { ChakraSelect } from '../Select';
+import { components } from 'react-select';
+import { Tooltip } from "@chakra-ui/react"
 import { useCustomSWR } from 'util/requests'
+
+const Option = props => {
+  const { command="" } = props.data
+  return (
+    <Tooltip 
+     label={`检测命令:${command}`}
+     placement="left" 
+     aria-label="A tooltip" 
+     shouldWrapChildren={true}>
+      <components.Option {...props} />
+    </Tooltip>
+  );
+};
 
 
 const QueryCommand = props => {
-  
+
   const { onChange, ControlChange, defaultValue, name, query, type } = props;
   const { data,isLoading } = useCustomSWR(`/s_${name}/search?ce_device_name=${query.name}`)
   const [value, setValue] = useState(defaultValue)
@@ -33,6 +48,7 @@ const QueryCommand = props => {
       size="lg"
       isClearable 
       isSearchable
+      components={{ Option }}
       options={options}
       isLoading={isLoading}
       defaultValue={defaultValue}

@@ -1,6 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { ChakraSelect } from '../Select';
+import { components } from 'react-select';
+import { Tooltip } from "@chakra-ui/react"
 import { useCustomSWR } from 'util/requests'
+
+const Option = props => {
+  const {device_model="",login_type="",login_port="" } = props.data
+  return (
+    <Tooltip 
+      label={`设备型号:${device_model} 登录类型:${login_type} 登录端口:${login_port}`} 
+      placement="right" 
+      aria-label="A tooltip" 
+      shouldWrapChildren={true}>
+      <components.Option {...props} />
+    </Tooltip>
+  );
+};
 
 const QueryAccount = props => {
   
@@ -16,11 +31,14 @@ const QueryAccount = props => {
     handleChange(null)
   },[query.name])
 
+
+
   return (
     <ChakraSelect
       size="lg"
       isClearable 
       isSearchable
+      components={{ Option }}
       options={data}
       isLoading={isLoading}
       defaultValue={defaultValue}
